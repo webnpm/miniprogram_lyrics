@@ -1,0 +1,74 @@
+<!--pages/song/ing/ing.wxml-->
+<view class="container {{mode == 'activity'?'hot':''}}">
+    <text wx:if="{{skipEndStatus}}" bindtap="skipEndFn" class="skipEnd">跳过片尾</text>
+    <view class="ing_top">
+        <view class="ing_top_name">
+            <image src="./assets/song_ing_001.png" class="ing_001" mode="widthFix"></image>
+            {{songTitle}}
+        </view>
+        <view class="ing_top_per">
+            <view class="active" style="width:{{progress +'%'}}"></view>
+        </view>
+        <view class="ing_top_time">
+            <view>{{currentTime}}</view>
+            <view>{{duration}}</view>
+        </view>
+    </view>
+    <view class="ing_bot">
+        <!-- <view bindtap="stopFn">结束</view> -->
+        <view class="refresh" bindtap="refreshFn">
+            <image src="./assets/song_ing_002.png" mode="widthFix"></image>
+            <view >重唱</view>
+        </view>
+        <view class="song_btn {{isPlay?'stop':''}}" bindtap="tapFn">
+            <text>{{isPlay?'暂停':isPlayStatus == 0?'开始跟唱':'继续跟唱'}}</text>
+        </view>
+
+        <!-- <view class="channel" bindtap="channelFn" wx:if="{{singType == 1}}">
+            <block wx:if="{{!channelMode}}">
+                <image src="./assets/song_ing_003.png" mode="widthFix"></image>
+                <view >原唱</view>
+            </block>
+            <block wx:if="{{channelMode}}">
+                <image src="./assets/song_ing_004.png" mode="widthFix"></image>
+                <view >伴唱</view>
+            </block>
+        </view> -->
+        
+    </view>
+    <view class="lyrc">
+        <scroll-view scroll-y="true" style="height: 100%;" scroll-with-animation="true" scroll-top="{{scrollTop}}" scroll-into-view="{{scrollIntoView}}">
+            <block wx:for="{{lyrc}}" wx:key="index">
+                <view id="lyrc_{{index}}" class="lyrc_li {{lyricIndex == index?'active':''}}">{{item.lyric}}</view>
+            </block>   
+        </scroll-view>
+    </view>
+
+    <van-popup show="{{ isShowNotice }}" round>
+        <view class="notice_popup">
+            <view class="notice_tit">唱前注意事项</view>
+            <view class="notice_descript">
+                <view>
+                    当您在进行呼吸训练时，若感到身体任
+                何不适，请暂停训练，稍作休息后，再继续训练。
+                </view>
+            </view>
+            <view class="notice_btn" bindtap="noticeCloseFn">确认</view>
+        </view>
+    </van-popup>
+
+    <van-popup show="{{ isShowExitPopup }}" round>
+        <view class="exit_popup">
+            <view class="exit_descript">
+                <view> 您好！您的歌曲练习已结束，请选择</view>   
+            </view>
+            <view class="exit_btn">
+                <!-- <view bindtap="exitCancelFn">继续练习</view> -->
+                <view class="ok" bindtap="selectModeFn" data-seq='2'>模拟练习(伴唱)</view>
+                <view class="ok" bindtap="selectModeFn" data-seq='1'>模拟练习(原唱)</view>
+                <view class="" bindtap="selectModeFn" data-seq='3'>正式录制</view>
+            </view>
+        </view>
+    </van-popup>
+    <van-toast id="van-toast" />
+</view>
